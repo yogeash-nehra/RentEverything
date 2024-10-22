@@ -1,0 +1,88 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:id="@+id/user_dashboard"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:visibility="gone">
+
+        <EditText
+            android:id="@+id/searchBar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Search..." />
+
+        <Button
+            android:id="@+id/searchButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Search" />
+
+        <Button
+            android:id="@+id/myRentalsButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="My Rentals" />
+
+        <Button
+            android:id="@+id/requestLenderButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Request Lender" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/lender_dashboard"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:visibility="gone">
+
+        <Button
+            android:id="@+id/addItemButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Add Item" />
+
+        <Button
+            android:id="@+id/myListingsButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="My Listings" />
+
+        <Button
+            android:id="@+id/viewRequestsButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="View Requests" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/admin_dashboard"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:visibility="gone">
+
+        <Button
+            android:id="@+id/approveLendersButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Approve Lenders" />
+
+        <Button
+            android:id="@+id/manageUsersButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Manage Users" />
+
+        <Button
+            android:id="@+id/manageItemsButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Manage Items" />
+    </LinearLayout>
+</LinearLayout>
