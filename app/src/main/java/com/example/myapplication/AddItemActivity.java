@@ -8,6 +8,8 @@ import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+
+import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.ArrayList;
@@ -37,7 +39,19 @@ public class AddItemActivity extends AppCompatActivity {
         itemsRecyclerView = findViewById(R.id.itemsRecyclerView);
 
         itemList = new ArrayList<>();
-        itemsAdapter = new ItemsAdapter(this, itemList);
+
+        // Initialize the adapter with the required listener
+        itemsAdapter = new ItemsAdapter(this, itemList, new ItemsAdapter.OnItemActionListener() {
+            @Override
+            public void onUpdateClick(Listing item) {
+                // Handle update action if needed (leave empty if not required)
+            }
+
+            @Override
+            public void onDeleteClick(Listing item) {
+                // Handle delete action if needed (leave empty if not required)
+            }
+        });
 
         itemsRecyclerView.setLayoutManager(new LinearLayoutManager(this));
         itemsRecyclerView.setAdapter(itemsAdapter);
@@ -70,11 +84,20 @@ public class AddItemActivity extends AppCompatActivity {
         }
 
         FirebaseFirestore firestore = FirebaseFirestore.getInstance();
-        // Create a new Listing object with all required fields
-        Listing newItem = new Listing(name, description, price, "url_to_image", category, "dummyLenderId");
 
-        firestore.collection("listings").add(newItem)
-                .addOnSuccessListener(documentReference -> {
+        // Generate a new document reference (with auto-generated ID)
+        DocumentReference newListingRef = firestore.collection("listings").document();
+
+        // Get the auto-generated ID
+        String newListingId = newListingRef.getId();
+
+        // Create a new Listing object with all required fields, including the dynamically generated ID
+        // Set available to true or false as appropriate (true in this example)
+        Listing newItem = new Listing(newListingId, name, description, price, "url_to_image", category, "dummyLenderId", "available", true);
+
+        // Save the Listing to Firestore using the dynamically generated document reference
+        newListingRef.set(newItem)
+                .addOnSuccessListener(aVoid -> {
                     Toast.makeText(this, "Item added successfully!", Toast.LENGTH_SHORT).show();
                     itemList.add(newItem); // Add to the list for displaying
                     itemsAdapter.notifyDataSetChanged(); // Notify the adapter of data changes

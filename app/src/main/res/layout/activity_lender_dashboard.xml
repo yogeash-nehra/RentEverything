@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="16dp">
+
+    <!-- Button to create a new listing -->
+    <Button
+        android:id="@+id/btnAddNewListing"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Add New Listing" />
+
+    <!-- Button to view booked listings -->
+    <Button
+        android:id="@+id/btnViewBookedListings"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="View Booked Listings"
+        android:layout_marginTop="8dp" />
+
+    <!-- Button to update a listing -->
+    <Button
+        android:id="@+id/btnUpdateListing"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Update Listing"
+        android:layout_marginTop="8dp" />
+
+    <!-- Button to delete a listing -->
+    <Button
+        android:id="@+id/btnDeleteListing"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Delete Listing"
+        android:layout_marginTop="8dp" />
+
+    <!-- RecyclerView to display the lender's listings -->
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/lenderListingsRecyclerView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp" />
+</LinearLayout>

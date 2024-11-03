@@ -3,73 +3,66 @@ package com.example.myapplication;
 import java.io.Serializable;
 
 public class Listing implements Serializable {
+    private String id;
     private String title;
     private String description;
-    private double price; // This represents the price per day
+    private double price;
     private String imageUrl;
-    private String category; // Field for the item category
-    private String lenderId; // Field for the lender's ID
+    private String category;
+    private String lenderId;
+    private String status;
+    private String renterEmail;
+    private String bookedDate;
+    private Boolean available;
 
-    // Default constructor required for Firestore
     public Listing() {
+        // Required for Firestore
     }
 
-    // Constructor with all required parameters
-    public Listing(String title, String description, double price, String imageUrl, String category, String lenderId) {
+    public Listing(String id, String title, String description, double price, String imageUrl, String category, String lenderId, String status, Boolean available) {
+        this.id = id;
         this.title = title;
         this.description = description;
-        this.price = price; // Correctly assigning to price
+        this.price = price;
         this.imageUrl = imageUrl;
         this.category = category;
-        this.lenderId = lenderId; // Use lenderId for clarity
+        this.lenderId = lenderId;
+        this.status = status;
+        this.available = available;
     }
 
-    // Getters and setters
-    public String getTitle() {
-        return title;
-    }
+    // Getters and Setters
 
-    public void setTitle(String title) {
-        this.title = title;
-    }
+    public String getId() { return id; }
+    public void setId(String id) { this.id = id; }
 
-    public String getDescription() {
-        return description;
-    }
+    public String getTitle() { return title; }
+    public void setTitle(String title) { this.title = title; }
 
-    public void setDescription(String description) {
-        this.description = description;
-    }
+    public String getDescription() { return description; }
+    public void setDescription(String description) { this.description = description; }
 
-    public double getPrice() {
-        return price; // Returns price as double
-    }
+    public double getPrice() { return price; }
+    public void setPrice(double price) { this.price = price; }
 
-    public void setPrice(double price) {
-        this.price = price; // Allows setting price as double
-    }
+    public String getImageUrl() { return imageUrl; }
+    public void setImageUrl(String imageUrl) { this.imageUrl = imageUrl; }
 
-    public String getImageUrl() {
-        return imageUrl;
-    }
+    public String getCategory() { return category; }
+    public void setCategory(String category) { this.category = category; }
 
-    public void setImageUrl(String imageUrl) {
-        this.imageUrl = imageUrl;
-    }
+    public String getLenderId() { return lenderId; }
+    public void setLenderId(String lenderId) { this.lenderId = lenderId; }
 
-    public String getCategory() {
-        return category;
-    }
+    public String getStatus() { return status; }
+    public void setStatus(String status) { this.status = status; }
 
-    public void setCategory(String category) {
-        this.category = category;
-    }
+    public String getRenterEmail() { return renterEmail; }
+    public void setRenterEmail(String renterEmail) { this.renterEmail = renterEmail; }
 
-    public String getLenderId() {
-        return lenderId; // Correctly named getter
-    }
+    public String getBookedDate() { return bookedDate; }
+    public void setBookedDate(String bookedDate) { this.bookedDate = bookedDate; }
 
-    public void setLenderId(String lenderId) {
-        this.lenderId = lenderId; // Correctly named setter
-    }
+    public Boolean getAvailable() { return available; }
+    public void setAvailable(Boolean available) { this.available = available; }
 }

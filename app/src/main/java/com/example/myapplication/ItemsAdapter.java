@@ -4,19 +4,29 @@ import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.TextView;
+
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
+
 import java.util.List;
 
 public class ItemsAdapter extends RecyclerView.Adapter<ItemsAdapter.ItemViewHolder> {
 
     private final Context context;
-    private final List<Listing> itemList; // Assuming Listing is a model class
+    private final List<Listing> itemList;
+    private final OnItemActionListener onItemActionListener;
 
-    public ItemsAdapter(Context context, List<Listing> itemList) {
+    public interface OnItemActionListener {
+        void onUpdateClick(Listing item);
+        void onDeleteClick(Listing item);
+    }
+
+    public ItemsAdapter(Context context, List<Listing> itemList, OnItemActionListener listener) {
         this.context = context;
         this.itemList = itemList;
+        this.onItemActionListener = listener;
     }
 
     @NonNull
@@ -29,8 +39,15 @@ public class ItemsAdapter extends RecyclerView.Adapter<ItemsAdapter.ItemViewHold
     @Override
     public void onBindViewHolder(@NonNull ItemViewHolder holder, int position) {
         Listing item = itemList.get(position);
-        holder.itemName.setText(item.getTitle()); // Assuming Listing class has a getName method
-        holder.itemDescription.setText(item.getDescription()); // Assuming Listing class has a getDescription method
+        holder.itemTitle.setText(item.getTitle());
+        holder.itemCategory.setText("Category: " + item.getCategory());
+        holder.itemPrice.setText("Price per day: $" + item.getPrice());
+
+        // Update button action
+        holder.updateButton.setOnClickListener(v -> onItemActionListener.onUpdateClick(item));
+
+        // Delete button action
+        holder.deleteButton.setOnClickListener(v -> onItemActionListener.onDeleteClick(item));
     }
 
     @Override
@@ -39,13 +56,16 @@ public class ItemsAdapter extends RecyclerView.Adapter<ItemsAdapter.ItemViewHold
     }
 
     static class ItemViewHolder extends RecyclerView.ViewHolder {
-        TextView itemName;
-        TextView itemDescription;
+        TextView itemTitle, itemCategory, itemPrice;
+        Button updateButton, deleteButton;
 
         public ItemViewHolder(View itemView) {
             super(itemView);
-            itemName = itemView.findViewById(R.id.itemNameTextView); // Ensure this ID matches your item layout
-            itemDescription = itemView.findViewById(R.id.itemDescriptionTextView); // Ensure this ID matches your item layout
+            itemTitle = itemView.findViewById(R.id.itemTitleTextView);
+            itemCategory = itemView.findViewById(R.id.itemCategoryTextView);
+            itemPrice = itemView.findViewById(R.id.itemPriceTextView);
+            updateButton = itemView.findViewById(R.id.btnUpdate);
+            deleteButton = itemView.findViewById(R.id.btnDelete);
         }
     }
 }

@@ -2,7 +2,7 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <uses-permission android:name="android.permission.INTERNET" />
-
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
     <application
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
@@ -16,7 +16,7 @@
 
         <activity android:name=".UserProfile" android:exported="false" />
         <activity android:name=".Login" android:exported="false" />
-        <activity android:name=".MainActivity" android:exported="false" />
+        <activity android:name=".MainActivity" android:exported="true" />
         <activity android:name=".Register" android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -24,9 +24,23 @@
             </intent-filter>
         </activity>
 
-        <activity android:name=".ItemDetailsActivity" />
-        <activity android:name=".ManageUsersActivity" />
-        <activity android:name=".DashboardActivity" android:exported="true" />
+        <activity android:name=".ItemDetailsActivity" android:exported="false" />
+        <activity android:name=".ManageUsersActivity" android:exported="false" />
+        <activity android:name=".BookingActivity" android:exported="false" />
+
+        <activity android:name=".DashboardActivity" android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity android:name=".LenderDashboardActivity" />
+        <activity android:name=".AddListingActivity" />
+        <activity android:name=".BookedListingsActivity" />
+        <activity android:name=".UserDashboardActivity" />
+        <activity android:name=".AdminDashboardActivity" />
+
+
 
         <meta-data
             android:name="preloaded_fonts"

@@ -1,30 +1,44 @@
-<?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical"
-    android:padding="16dp">
+    android:padding="8dp">
 
+    <ImageView
+        android:id="@+id/itemImage"
+        android:layout_width="match_parent"
+        android:layout_height="180dp"
+        android:scaleType="centerCrop"
+        android:src="@drawable/background" />
     <TextView
-        android:id="@+id/itemNameTextView"
+        android:id="@+id/itemTitleTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Item Name"
-        android:textSize="18sp"
-        android:textStyle="bold" />
+        android:textStyle="bold"
+        android:textSize="16sp"
+        android:text="Title" />
 
     <TextView
-        android:id="@+id/itemDescriptionTextView"
+        android:id="@+id/itemCategoryTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Item Description"
-        android:textSize="14sp" />
+        android:text="Category" />
 
     <TextView
         android:id="@+id/itemPriceTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Item Price"
-        android:textSize="16sp"
-        android:textColor="@android:color/holo_green_dark" />
+        android:text="Price" />
+
+    <Button
+        android:id="@+id/btnUpdate"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Update" />
+
+    <Button
+        android:id="@+id/btnDelete"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Delete" />
 </LinearLayout>

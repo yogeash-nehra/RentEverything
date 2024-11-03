@@ -1,0 +1,70 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:padding="16dp">
+
+    <!-- Item Name -->
+    <TextView
+        android:id="@+id/tv_item_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Item Name"
+        android:textSize="18sp"
+        android:paddingBottom="8dp" />
+
+    <!-- Select Start Date -->
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Select Start Date" />
+
+    <Button
+        android:id="@+id/btn_select_date"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Select Date" />
+
+    <TextView
+        android:id="@+id/tv_selected_date"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="No Date Selected"
+        android:paddingBottom="16dp" />
+
+    <!-- Lending Days Input -->
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Enter Number of Days" />
+
+    <EditText
+        android:id="@+id/et_lending_days"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Number of days"
+        android:inputType="number" />
+
+    <!-- Agree to Terms and Conditions -->
+    <CheckBox
+        android:id="@+id/cb_agree_terms"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="I agree to the Terms and Conditions" />
+
+    <!-- Complete Booking Button -->
+    <Button
+        android:id="@+id/btn_complete_booking"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Complete Booking" />
+
+    <!-- Progress Bar (Initially Hidden) -->
+    <ProgressBar
+        android:id="@+id/progressBar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:visibility="gone"
+        android:layout_gravity="center"
+        android:paddingTop="16dp" />
+</LinearLayout>
