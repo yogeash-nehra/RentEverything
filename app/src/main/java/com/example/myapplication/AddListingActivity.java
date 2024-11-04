@@ -1,6 +1,5 @@
 package com.example.myapplication;
 
-import android.app.ProgressDialog;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
@@ -36,7 +35,6 @@ public class AddListingActivity extends AppCompatActivity {
     private StorageReference storageReference;
     private FirebaseFirestore firestore;
     private FirebaseAuth auth;
-    private ProgressDialog progressDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,7 +42,7 @@ public class AddListingActivity extends AppCompatActivity {
         setContentView(R.layout.activity_add_listing);
 
         // Initialize Firebase instances
-        storageReference = FirebaseStorage.getInstance().getReference().child("listing_images"); // Initialize storage reference for "listing_images" directory
+        storageReference = FirebaseStorage.getInstance().getReference().child("item_images"); // Images will be saved in this new folder
         firestore = FirebaseFirestore.getInstance();
         auth = FirebaseAuth.getInstance();
 
@@ -55,11 +53,6 @@ public class AddListingActivity extends AppCompatActivity {
         itemImageView = findViewById(R.id.itemImageView);
         uploadImageButton = findViewById(R.id.uploadImageButton);
         addListingButton = findViewById(R.id.addListingButton);
-
-        // Initialize progress dialog
-        progressDialog = new ProgressDialog(this);
-        progressDialog.setMessage("Uploading...");
-        progressDialog.setCancelable(false);
 
         // Set up upload button to open the image picker
         uploadImageButton.setOnClickListener(v -> openImageChooser());
@@ -85,45 +78,29 @@ public class AddListingActivity extends AppCompatActivity {
     }
 
     private void saveListing() {
-        String title = itemTitleEditText.getText().toString().trim();
-        String description = itemDescriptionEditText.getText().toString().trim();
-        String category = itemCategoryEditText.getText().toString().trim();
-        String priceText = itemPriceEditText.getText().toString().trim();
+        String title = itemTitleEditText.getText().toString();
+        String description = itemDescriptionEditText.getText().toString();
+        String category = itemCategoryEditText.getText().toString();
+        String priceText = itemPriceEditText.getText().toString();
 
         if (title.isEmpty() || description.isEmpty() || category.isEmpty() || priceText.isEmpty() || imageUri == null) {
             Toast.makeText(this, "Please fill all fields and select an image", Toast.LENGTH_SHORT).show();
             return;
         }
 
-        double price;
-        try {
-            price = Double.parseDouble(priceText);
-        } catch (NumberFormatException e) {
-            Toast.makeText(this, "Invalid price format", Toast.LENGTH_SHORT).show();
-            return;
-        }
-
-        if (auth.getCurrentUser() == null) {
-            Toast.makeText(this, "User not authenticated", Toast.LENGTH_SHORT).show();
-            return;
-        }
-
-        // Show progress dialog
-        progressDialog.show();
-
+        double price = Double.parseDouble(priceText);
         uploadImageAndSaveListing(title, description, category, price);
     }
 
     private void uploadImageAndSaveListing(String title, String description, String category, double price) {
         if (imageUri == null) {
             Toast.makeText(this, "Please select an image", Toast.LENGTH_SHORT).show();
-            progressDialog.dismiss();
             return;
         }
 
         // Generate a unique ID for the image file
         String imageId = UUID.randomUUID().toString();
-        StorageReference fileReference = storageReference.child(imageId + ".jpg");
+        StorageReference fileReference = storageReference.child(imageId);
 
         fileReference.putFile(imageUri)
                 .addOnSuccessListener(taskSnapshot -> fileReference.getDownloadUrl().addOnSuccessListener(uri -> {
@@ -134,7 +111,6 @@ public class AddListingActivity extends AppCompatActivity {
                 .addOnFailureListener(e -> {
                     Log.e("ImageUpload", "Upload failed", e);
                     Toast.makeText(this, "Image upload failed: " + e.getMessage(), Toast.LENGTH_SHORT).show();
-                    progressDialog.dismiss();
                 });
     }
 
@@ -156,12 +132,8 @@ public class AddListingActivity extends AppCompatActivity {
                 .set(listingData)
                 .addOnSuccessListener(aVoid -> {
                     Toast.makeText(this, "Listing added successfully!", Toast.LENGTH_SHORT).show();
-                    progressDialog.dismiss();
                     finish();
                 })
-                .addOnFailureListener(e -> {
-                    Toast.makeText(this, "Failed to add listing", Toast.LENGTH_SHORT).show();
-                    progressDialog.dismiss();
-                });
+                .addOnFailureListener(e -> Toast.makeText(this, "Failed to add listing", Toast.LENGTH_SHORT).show());
     }
 }

@@ -39,6 +39,7 @@
         <activity android:name=".BookedListingsActivity" />
         <activity android:name=".UserDashboardActivity" />
         <activity android:name=".AdminDashboardActivity" />
+        <activity android:name=".UpdateListingActivity" />
 
 
 

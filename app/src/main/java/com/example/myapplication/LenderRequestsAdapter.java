@@ -39,18 +39,18 @@ public class LenderRequestsAdapter extends RecyclerView.Adapter<LenderRequestsAd
         holder.lenderDetailsTextView.setText(request.getDetails());
 
         // Approve button functionality
-        holder.approveButton.setOnClickListener(v -> {
+        /*holder.approveButton.setOnClickListener(v -> {
             adminActivity.approveRequest(request.getUserId());
             lenderRequests.remove(position);
             notifyItemRemoved(position);
-        });
+        });*/
 
         // Reject button functionality (optional)
-        holder.rejectButton.setOnClickListener(v -> {
+/*        holder.rejectButton.setOnClickListener(v -> {
             adminActivity.rejectRequest(request.getUserId());
             lenderRequests.remove(position);
             notifyItemRemoved(position);
-        });
+        });*/
     }
 
     @Override

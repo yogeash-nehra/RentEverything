@@ -68,7 +68,7 @@ public class ItemDetailsActivity extends AppCompatActivity {
         bookNowButton.setOnClickListener(v -> showDatePicker());
     }
 
-    // Show a date picker to select the start and end date
+    // Show a date picker to select the start date
     private void showDatePicker() {
         Calendar calendar = Calendar.getInstance();
         DatePickerDialog startDatePicker = new DatePickerDialog(this, (view, year, month, dayOfMonth) -> {
@@ -118,15 +118,26 @@ public class ItemDetailsActivity extends AppCompatActivity {
         booking.calculateTotalPrice(listing.getPrice());
 
         // Store booking data in Firestore
-        FirebaseFirestore.getInstance().collection("bookings")
+        FirebaseFirestore firestore = FirebaseFirestore.getInstance();
+        firestore.collection("bookings")
                 .document(bookingId)
                 .set(booking)
                 .addOnSuccessListener(aVoid -> {
                     Toast.makeText(this, "Booking created successfully!", Toast.LENGTH_SHORT).show();
+                    updateListingAvailability();
+                })
+                .addOnFailureListener(e -> Toast.makeText(this, "Failed to create booking", Toast.LENGTH_SHORT).show());
+    }
+
+    // Update listing's availability status in Firestore
+    private void updateListingAvailability() {
+        FirebaseFirestore.getInstance().collection("listings")
+                .document(listing.getId())
+                .update("available", false, "status", "unavailable")
+                .addOnSuccessListener(aVoid -> {
+                    Toast.makeText(this, "Listing updated to unavailable", Toast.LENGTH_SHORT).show();
                     finish(); // Close the ItemDetailsActivity
                 })
-                .addOnFailureListener(e -> {
-                    Toast.makeText(this, "Failed to create booking", Toast.LENGTH_SHORT).show();
-                });
+                .addOnFailureListener(e -> Toast.makeText(this, "Failed to update listing availability", Toast.LENGTH_SHORT).show());
     }
 }

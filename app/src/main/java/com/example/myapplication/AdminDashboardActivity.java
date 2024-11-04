@@ -1,44 +1,84 @@
 package com.example.myapplication;
 
-import android.content.Intent;
 import android.os.Bundle;
-import android.widget.Button;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class AdminDashboardActivity extends AppCompatActivity {
 
-    private Button manageUsersButton, manageListingsButton;
+    private RecyclerView usersRecyclerView;
+    private UsersAdapter usersAdapter;
+    private List<User> usersList;
+    private FirebaseFirestore firestore;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_admin_dashboard);
 
-        manageUsersButton = findViewById(R.id.manageUsersButton);
-        manageListingsButton = findViewById(R.id.manageListingsButton);
+        firestore = FirebaseFirestore.getInstance();
+        usersList = new ArrayList<>();
 
-        manageUsersButton.setOnClickListener(v -> startActivity(new Intent(this, ManageUsersActivity.class)));
+        usersRecyclerView = findViewById(R.id.usersRecyclerView);
+        usersRecyclerView.setLayoutManager(new LinearLayoutManager(this));
 
-        manageListingsButton.setOnClickListener(v -> startActivity(new Intent(this, ManageItemsActivity.class)));
+        usersAdapter = new UsersAdapter(this, usersList, new UsersAdapter.OnUserClickListener() {
+            @Override
+            public void onUpdateRoleClick(User user) {
+                updateUserRole(user); // Call function to update user role
+            }
+
+            @Override
+            public void onDeleteUserClick(User user) {
+                deleteUser(user); // Call function to delete user
+            }
+        });
+        usersRecyclerView.setAdapter(usersAdapter);
+
+        fetchUsers();
     }
 
-    public void approveRequest(String userId) {
-        FirebaseFirestore firestore = FirebaseFirestore.getInstance();
-        firestore.collection("lenderRequests").document(userId)
-                .update("status", "approved")
-                .addOnSuccessListener(aVoid -> Toast.makeText(this, "Request approved", Toast.LENGTH_SHORT).show())
-                .addOnFailureListener(e -> Toast.makeText(this, "Failed to approve request", Toast.LENGTH_SHORT).show());
+    private void fetchUsers() {
+        firestore.collection("users")
+                .get()
+                .addOnCompleteListener(task -> {
+                    if (task.isSuccessful()) {
+                        usersList.clear();
+                        for (QueryDocumentSnapshot document : task.getResult()) {
+                            User user = document.toObject(User.class);
+                            user.setId(document.getId()); // Set the document ID as user ID
+                            usersList.add(user);
+                        }
+                        usersAdapter.notifyDataSetChanged();
+                    } else {
+                        Toast.makeText(AdminDashboardActivity.this, "Error fetching users", Toast.LENGTH_SHORT).show();
+                    }
+                });
     }
 
-    public void rejectRequest(String userId) {
-        FirebaseFirestore firestore = FirebaseFirestore.getInstance();
-        firestore.collection("lenderRequests").document(userId)
-                .update("status", "rejected")
-                .addOnSuccessListener(aVoid -> Toast.makeText(this, "Request rejected", Toast.LENGTH_SHORT).show())
-                .addOnFailureListener(e -> Toast.makeText(this, "Failed to reject request", Toast.LENGTH_SHORT).show());
+    private void updateUserRole(User user) {
+        // Implement logic to update user role, e.g., show a dialog to select the new role
+        Toast.makeText(this, "Update role for user: " + user.getName(), Toast.LENGTH_SHORT).show();
+    }
+
+    private void deleteUser(User user) {
+        firestore.collection("users").document(user.getId())
+                .delete()
+                .addOnSuccessListener(aVoid -> {
+                    usersList.remove(user);
+                    usersAdapter.notifyDataSetChanged();
+                    Toast.makeText(this, "User deleted successfully.", Toast.LENGTH_SHORT).show();
+                })
+                .addOnFailureListener(e -> Toast.makeText(this, "Failed to delete user.", Toast.LENGTH_SHORT).show());
     }
 }

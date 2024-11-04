@@ -15,9 +15,8 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
-import com.google.firebase.FirebaseApp;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -37,7 +36,7 @@ public class BookingActivity extends AppCompatActivity {
     private Button btnSelectDate, btnCompleteBooking;
     private ProgressBar progressBar;
     private String itemId, itemName, lenderId, userId, selectedDate;
-    private double pricePerDay;  // The daily rate for the item
+    private double pricePerDay;
 
     private FirebaseAuth firebaseAuth;
     private FirebaseFirestore firestore;
@@ -49,16 +48,15 @@ public class BookingActivity extends AppCompatActivity {
         setContentView(R.layout.activity_booking);
 
         // Initialize Firebase
-        FirebaseApp.initializeApp(this);
         firebaseAuth = FirebaseAuth.getInstance();
         firestore = FirebaseFirestore.getInstance();
 
         // Get passed data from intent (item and user details)
-        itemId = getIntent().getStringExtra("itemId");
+        itemId = getIntent().getStringExtra("listingId");
         itemName = getIntent().getStringExtra("itemName");
         lenderId = getIntent().getStringExtra("lenderId");
-        userId = firebaseAuth.getCurrentUser().getUid(); // Get current user ID
-        pricePerDay = getIntent().getDoubleExtra("pricePerDay", 0.0); // Get price per day from intent
+        userId = firebaseAuth.getCurrentUser().getUid();
+        pricePerDay = getIntent().getDoubleExtra("pricePerDay", 0.0);
 
         // UI references
         tvItemName = findViewById(R.id.tv_item_name);
@@ -68,7 +66,7 @@ public class BookingActivity extends AppCompatActivity {
         btnSelectDate = findViewById(R.id.btn_select_date);
         btnCompleteBooking = findViewById(R.id.btn_complete_booking);
         progressBar = findViewById(R.id.progressBar);
-        tvTotalPrice = findViewById(R.id.tv_total_price); // Display total price
+        tvTotalPrice = findViewById(R.id.tv_total_price);
 
         tvItemName.setText(itemName);
 
@@ -96,17 +94,15 @@ public class BookingActivity extends AppCompatActivity {
         String lendingDaysStr = etLendingDays.getText().toString();
         boolean agreed = cbAgreeTerms.isChecked();
 
-        // Validation: Ensure all fields are filled
         if (TextUtils.isEmpty(selectedDate) || lendingDaysStr.isEmpty() || !agreed) {
             Toast.makeText(this, "Please fill all details and agree to terms", Toast.LENGTH_SHORT).show();
             return;
         }
 
         int lendingDays = Integer.parseInt(lendingDaysStr);
-        double totalPrice = calculateTotalPrice(lendingDays);
+        double totalPrice = lendingDays * pricePerDay;
         tvTotalPrice.setText("Total Price: $" + totalPrice);
 
-        // Calculate the end date
         Date startDate;
         try {
             startDate = dateFormat.parse(selectedDate);
@@ -122,9 +118,7 @@ public class BookingActivity extends AppCompatActivity {
         progressBar.setVisibility(View.VISIBLE);
 
         // Create booking data
-        String bookingId = firestore.collection("bookings").document().getId();
         Map<String, Object> bookingData = new HashMap<>();
-        bookingData.put("bookingId", bookingId);
         bookingData.put("itemId", itemId);
         bookingData.put("itemName", itemName);
         bookingData.put("lenderId", lenderId);
@@ -134,21 +128,14 @@ public class BookingActivity extends AppCompatActivity {
         bookingData.put("totalPrice", totalPrice);
         bookingData.put("status", "booked");
 
-        // Save booking to Firestore
-        DocumentReference itemRef = firestore.collection("listings").document(itemId);
-        itemRef.update("available", false) // Set availability to false
-                .addOnSuccessListener(aVoid -> {
-                    Toast.makeText(BookingActivity.this, "Booking completed successfully!", Toast.LENGTH_SHORT).show();
-                    finish(); // Close the activity and go back
+        firestore.collection("bookings").add(bookingData)
+                .addOnSuccessListener(documentReference -> {
+                    markItemAsUnavailable();
                 })
                 .addOnFailureListener(e -> {
-                    Toast.makeText(BookingActivity.this, "Failed to update item availability", Toast.LENGTH_SHORT).show();
+                    progressBar.setVisibility(View.GONE);
+                    Toast.makeText(BookingActivity.this, "Failed to complete booking", Toast.LENGTH_SHORT).show();
                 });
-        itemRef.update("status","unavailable");
-    }
-
-    private double calculateTotalPrice(int lendingDays) {
-        return lendingDays * pricePerDay;
     }
 
     private Date calculateEndDate(Date startDate, int days) {
@@ -158,14 +145,16 @@ public class BookingActivity extends AppCompatActivity {
         return calendar.getTime();
     }
 
-    private void markItemUnavailable() {
+    private void markItemAsUnavailable() {
         DocumentReference itemRef = firestore.collection("listings").document(itemId);
-        itemRef.update("status", "unavailable").addOnCompleteListener(task -> {
-            if (task.isSuccessful()) {
-                // Handle successful update if needed
-            } else {
-                // Handle failure if needed
-            }
-        });
+        itemRef.update("available", false, "status", "unavailable")
+                .addOnSuccessListener(aVoid -> {
+                    Toast.makeText(BookingActivity.this, "Booking completed successfully!", Toast.LENGTH_SHORT).show();
+                    finish();
+                })
+                .addOnFailureListener(e -> {
+                    progressBar.setVisibility(View.GONE);
+                    Toast.makeText(BookingActivity.this, "Failed to update item availability", Toast.LENGTH_SHORT).show();
+                });
     }
 }

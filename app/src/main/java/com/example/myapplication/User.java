@@ -17,7 +17,7 @@ public class User {
     public User(String name, String email) {
         this.name = name;
         this.email = email;
-        this.role = "User"; // Default role set to User
+        this.role = "admin"; // Default role set to User
     }
 
     // Getters and setters for id, name, email, role, and bookings

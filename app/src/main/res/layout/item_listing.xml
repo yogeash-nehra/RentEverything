@@ -1,44 +1,81 @@
+<?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical"
-    android:padding="8dp">
+    android:padding="16dp"
+    android:background="?attr/selectableItemBackground"
+    android:gravity="center_vertical">
 
+    <!-- Item Image -->
     <ImageView
         android:id="@+id/itemImage"
-        android:layout_width="match_parent"
-        android:layout_height="180dp"
+        android:layout_width="402dp"
+        android:layout_height="145dp"
+        android:layout_gravity="center"
+        android:contentDescription="Image"
         android:scaleType="centerCrop"
         android:src="@drawable/background" />
+
+    <!-- Item Title -->
     <TextView
         android:id="@+id/itemTitleTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textStyle="bold"
-        android:textSize="16sp"
-        android:text="Title" />
+        android:layout_marginTop="8dp"
+        android:text="Item Title"
+        android:textAppearance="?attr/textAppearanceHeadline6" />
 
+    <!-- Item Category -->
     <TextView
         android:id="@+id/itemCategoryTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Category" />
+        android:text="Category: Placeholder"
+        android:textAppearance="?attr/textAppearanceBody2"
+        android:layout_marginTop="4dp" />
 
+    <!-- Item Price -->
     <TextView
         android:id="@+id/itemPriceTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Price" />
+        android:text="Price per day: $0"
+        android:textAppearance="?attr/textAppearanceBody2"
+        android:layout_marginTop="4dp" />
 
-    <Button
-        android:id="@+id/btnUpdate"
-        android:layout_width="wrap_content"
+    <!-- Action Buttons -->
+    <LinearLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Update" />
+        android:orientation="horizontal"
+        android:layout_marginTop="8dp"
+        android:gravity="end">
 
-    <Button
-        android:id="@+id/btnDelete"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Delete" />
+        <!-- Book Now Button -->
+        <Button
+            android:id="@+id/btnBookNow"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Book Now" />
+
+        <!-- Update Button -->
+        <Button
+            android:id="@+id/btnUpdate"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:text="Update"
+            android:visibility="gone" />
+
+        <!-- Delete Button -->
+        <Button
+            android:id="@+id/btnDelete"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:text="Delete"
+            android:visibility="gone" />
+    </LinearLayout>
+
 </LinearLayout>

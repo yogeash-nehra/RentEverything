@@ -80,6 +80,7 @@ public class MainActivity extends AppCompatActivity {
 
         // Fetch listings from Firestore
         fetchListings();
+    onResume();
 
         // Logout button
         logoutBtn.setOnClickListener(v -> {
@@ -90,6 +91,12 @@ public class MainActivity extends AppCompatActivity {
 
         // Dashboard button
         dashboardBtn.setOnClickListener(v -> getUserRoleFromFirebase());
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        fetchListings();
     }
 
     private void getUserRoleFromFirebase() {
@@ -121,7 +128,7 @@ public class MainActivity extends AppCompatActivity {
 
     private void fetchListings() {
         firestore.collection("listings")
-                .whereEqualTo("available", true)
+                .whereEqualTo("available", true) // Filter to only fetch available listings
                 .get()
                 .addOnCompleteListener(task -> {
                     if (task.isSuccessful()) {
@@ -137,4 +144,5 @@ public class MainActivity extends AppCompatActivity {
                     }
                 });
     }
+
 }

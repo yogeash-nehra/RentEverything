@@ -59,7 +59,7 @@ public class LenderDashboardActivity extends AppCompatActivity {
             public void onBookNowClick(Listing listing) {
                 // Empty implementation since "Book Now" is not needed
             }
-        }, false);
+        }, true);
 
         lenderListingsRecyclerView.setAdapter(listingAdapter);
 
@@ -67,6 +67,12 @@ public class LenderDashboardActivity extends AppCompatActivity {
 
         btnAddNewListing.setOnClickListener(v -> openAddListingActivity());
         btnViewBookedListings.setOnClickListener(v -> openBookedListingsActivity());
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        fetchLenderListings(); // Refresh listings when returning to this activity
     }
 
     private void fetchLenderListings() {

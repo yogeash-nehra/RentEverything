@@ -22,7 +22,7 @@ public class DashboardActivity extends AppCompatActivity {
 
         String userRole = getIntent().getStringExtra("userRole");
         if (userRole == null) {
-            userRole = "user";
+            userRole = "admin";
         }
 
         switch (userRole) {
